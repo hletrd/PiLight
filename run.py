@@ -7,8 +7,7 @@ from flask import Flask, render_template, send_from_directory
 import math
 #import threading
 #from time import sleep
-import pexpect
-import sys
+import os, signal, subprocess
 
 app = Flask(__name__)
 tNow = 6600
@@ -92,7 +91,7 @@ def calcB(rawB):
 			GPIO.output(pin, 0)
 			sleep(0.01)"""
 
-p = pexpect.spawn('./pwm', logfile=sys.stdout)
+p = subprocess.Popen('./pwm', stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, preexec_fn=os.setsid) 
 
 try:
 	#GPIO.setmode(GPIO.BOARD)
@@ -113,7 +112,7 @@ try:
 	#tr.start()
 	#tg.start()
 	#tb.start()
-	p.sendline(str(calcR(rNow)) + ' ' + str(calcG(gNow)) + ' ' + str(calcB(bNow)))
+	p.stdin.write(str(calcR(rNow)) + ' ' + str(calcG(gNow)) + ' ' + str(calcB(bNow)) + '\n')
 	print str(calcR(rNow)) + ' ' + str(calcG(gNow)) + ' ' + str(calcB(bNow))
 except:
 	pass
@@ -154,8 +153,9 @@ def handlepost(t, r, g, b):
 	#tr.start()
 	#tg.start()
 	#tb.start()
-	p.expect('PWM set OK')
-	p.sendline(str(calcR(rNow)) + ' ' + str(calcG(gNow)) + ' ' + str(calcB(bNow)))
+	p.kill()
+	p = subprocess.Popen('./pwm', stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, preexec_fn=os.setsid) 
+	p.stdin.write(str(calcR(rNow)) + ' ' + str(calcG(gNow)) + ' ' + str(calcB(bNow)) + '\n')
 	print str(calcR(rNow)) + ' ' + str(calcG(gNow)) + ' ' + str(calcB(bNow))
 	return 'succeed'
 
