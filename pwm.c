@@ -15,5 +15,6 @@ int main(int argc, char **argv) {
 		gpioPWM(16, r);
 		gpioPWM(20, g);
 		gpioPWM(21, b);
+		puts("PWM set OK");
 	}
 }

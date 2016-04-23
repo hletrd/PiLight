@@ -7,7 +7,8 @@ from flask import Flask, render_template, send_from_directory
 import math
 #import threading
 #from time import sleep
-from subprocess import Popen, PIPE, STDOUT
+import pexpect
+import sys
 
 app = Flask(__name__)
 tNow = 6600
@@ -91,7 +92,7 @@ def calcB(rawB):
 			GPIO.output(pin, 0)
 			sleep(0.01)"""
 
-p = Popen(['./pwm'], stdout=PIPE, stdin=PIPE, stderr=PIPE)
+p = pexpect.spawn('./pwm', logfile=sys.stdout)
 
 try:
 	#GPIO.setmode(GPIO.BOARD)
@@ -112,7 +113,7 @@ try:
 	#tr.start()
 	#tg.start()
 	#tb.start()
-	p.stdin.write(str(calcR(rNow)) + ' ' + str(calcG(gNow)) + ' ' + str(calcB(bNow)) + "\n")
+	p.sendline(str(calcR(rNow)) + ' ' + str(calcG(gNow)) + ' ' + str(calcB(bNow)))
 	print str(calcR(rNow)) + ' ' + str(calcG(gNow)) + ' ' + str(calcB(bNow))
 except:
 	pass
@@ -153,7 +154,7 @@ def handlepost(t, r, g, b):
 	#tr.start()
 	#tg.start()
 	#tb.start()
-	p.stdin.write(str(calcR(rNow)) + ' ' + str(calcG(gNow)) + ' ' + str(calcB(bNow)) + "\n")
+	p.sendline(str(calcR(rNow)) + ' ' + str(calcG(gNow)) + ' ' + str(calcB(bNow)))
 	print str(calcR(rNow)) + ' ' + str(calcG(gNow)) + ' ' + str(calcB(bNow))
 	return 'succeed'
 
