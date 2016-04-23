@@ -7,13 +7,14 @@ from flask import Flask, render_template, send_from_directory
 import math
 #import threading
 #from time import sleep
-import pexpect, sys
+from subprocess import Popen, PIPE, STDOUT
+import os
 
 app = Flask(__name__)
 tNow = 6600
-rNow = 100
-gNow = 100
-bNow = 100
+rNow = 10
+gNow = 10
+bNow = 10
 
 tMax = 12000
 tmin = 1500
@@ -91,12 +92,7 @@ def calcB(rawB):
 			GPIO.output(pin, 0)
 			sleep(0.01)"""
 
-p = pexpect.spawn('sudo ./pwm')
-p.logfile_read = sys.stdout
-p.sendline(str(calcR(rNow)) + ' ' + str(calcG(gNow)) + ' ' + str(calcB(bNow)))
-p.expect('OK')
-p.sendline('10 10 10')
-
+os.system("sudo ./pwm " + str(calcR(rNow)) + ' ' + str(calcG(gNow)) + ' ' + str(calcB(bNow)))
 
 #try:
 	#GPIO.setmode(GPIO.BOARD)
@@ -157,9 +153,8 @@ def handlepost(t, r, g, b):
 	#tr.start()
 	#tg.start()
 	#tb.start()
-	p.expect('OK')
-	p.sendline(str(calcR(rNow)) + ' ' + str(calcG(gNow)) + ' ' + str(calcB(bNow)))
-	print str(calcR(rNow)) + ' ' + str(calcG(gNow)) + ' ' + str(calcB(bNow))
+	os.system("sudo killall -9 pwm")
+	os.system("sudo ./pwm " + str(calcR(rNow)) + ' ' + str(calcG(gNow)) + ' ' + str(calcB(bNow)))
 	return 'succeed'
 
 @app.route('/static/<path:path>')
