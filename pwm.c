@@ -9,13 +9,10 @@ int main(int argc, char **argv) {
 	gpioSetPWMrange(20, 1000);
 	gpioSetPWMrange(21, 1000);
 
-	while(1) {
-		int r, g, b;
-		scanf("%d%d%d", &r, &g, &b);
-		gpioInitialise();
-		gpioPWM(16, r);
-		gpioPWM(20, g);
-		gpioPWM(21, b);
-		puts("PWM set OK");
-	}
+	
+	int r, g, b;
+	scanf("%d%d%d", &r, &g, &b);
+	gpioPWM(16, r);
+	gpioPWM(20, g);
+	gpioPWM(21, b);
 }
