@@ -1,4 +1,4 @@
-# PiLight
+# <del>P*Light</del> PiLight
 * Clone of Yeelight based on Raspberry Pi
 * Adjustable color temperatures
 * Adjustable RGB value
