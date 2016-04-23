@@ -1,7 +1,7 @@
-try:
+#try:
 	#import RPi.GPIO as GPIO
-except:
-	print('No module named RPI found')
+#except:
+	#print('No module named RPI found')
 from flask import Flask, render_template, send_from_directory
 #from htmlmin.minify import html_minify
 import math
