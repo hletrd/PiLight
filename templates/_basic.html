@@ -235,7 +235,7 @@ c.addEventListener("mouseup", ctUp, false);
 c.addEventListener("mouseout", ctUp, false);
 
 ctdown = false;
-document.getElementById("colorpicker").setAttribute('class', 'jscolor {width:' + (cwidth-60) + ', height:200, onFineChange:\'sendrgb(this)\'}');
+document.getElementById("colorpicker").setAttribute('class', 'jscolor {width:' + (cwidth-60) + ', height:150, onFineChange:\'sendrgb(this)\'}');
 window.onload = function(){
 	document.getElementById("colorpicker").jscolor.fromRGB(rNow, gNow, bNow);
 	document.getElementById("colorpicker").jscolor.show();

@@ -3,7 +3,7 @@ try:
 except:
 	print('No module named RPI found')
 from flask import Flask, render_template, send_from_directory
-from htmlmin.minify import html_minify
+#from htmlmin.minify import html_minify
 import math
 
 app = Flask(__name__)
@@ -82,7 +82,7 @@ except:
 
 @app.route('/')
 def index():
-	return html_minify(render_template('_basic.html', tNow=tNow, rNow=rNow, gNow=gNow, bNow=bNow))
+	return render_template('_basic.html', tNow=tNow, rNow=rNow, gNow=gNow, bNow=bNow)
 
 @app.route('/send/<int:t>/<int:r>/<int:g>/<int:b>')
 def handlepost(t, r, g, b):
@@ -117,4 +117,4 @@ def send_static(path):
 	return send_from_directory(app.config['UPLOAD_FOLDER'], path, as_attachment=False)
 
 if __name__ == '__main__':
-	app.run(debug=True, port=8080)
+	app.run(host='0.0.0.0', debug=True, port=8080)
