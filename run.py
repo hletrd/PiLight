@@ -1,10 +1,13 @@
 try:
-	import RPi.GPIO as GPIO
+	#import RPi.GPIO as GPIO
 except:
 	print('No module named RPI found')
 from flask import Flask, render_template, send_from_directory
 #from htmlmin.minify import html_minify
 import math
+#import threading
+#from time import sleep
+from subprocess import Popen, PIPE, STDOUT
 
 app = Flask(__name__)
 tNow = 6600
@@ -15,14 +18,10 @@ bNow = 255
 tMax = 12000
 tmin = 1500
 
-PWMfreq = 1000
-rMax = 50
-gMax = 72
-bMax = 72
-
-rPin = 36
-gPin = 38
-bPin = 40
+#PWMfreq = 100
+rMax = 35
+gMax = 48
+bMax = 48
 
 def colorTemptoRGB(colortemp):
 	colortemp /= 100
@@ -62,25 +61,58 @@ def colorTemptoRGB(colortemp):
 	return {'r': r, 'g': g, 'b': b}
 
 def calcR(rawR):
-	return rawR / 255.0 * rMax / 100 * colorTemptoRGB(tNow)['r']/255*100
+	return int(rawR / 255.0 * rMax / 100 * colorTemptoRGB(tNow)['r']/255*1000)
 
 def calcG(rawG):
-	return rawG / 255.0 * gMax / 100 * colorTemptoRGB(tNow)['g']/255*100
+	return int(rawG / 255.0 * gMax / 100 * colorTemptoRGB(tNow)['g']/255*1000)
 
 def calcB(rawB):
-	return rawB / 255.0 * bMax / 100 * colorTemptoRGB(tNow)['b']/255*100
+	return int(rawB / 255.0 * bMax / 100 * colorTemptoRGB(tNow)['b']/255*1000)
+
+"""class PWM(threading.Thread):
+	def __init__(self, dc, color):
+		threading.Thread.__init__(self)
+		self.dc = dc
+		self.color = color
+		self.flag = True
+
+	def run(self):
+		if self.color == 'R':
+			pin = rPin
+		elif self.color == 'G':
+			pin = gPin
+		elif self.color == 'B':
+			pin = bPin
+		self.on = self.dc/10000
+		self.off = (100-self.dc) / 10000
+		while self.flag:
+			GPIO.output(pin, 1)
+			sleep(0.001)
+			GPIO.output(pin, 0)
+			sleep(0.01)"""
+
+p = Popen(['pwm'], stdout=PIPE, stdin=PIPE, stderr=PIPE)
 
 try:
-	GPIO.setmode(GPIO.BOARD)
-	GPIO.setup(rPin, GPIO.OUT)
-	GPIO.setup(gPin, GPIO.OUT)
-	GPIO.setup(bPin, GPIO.OUT)
-	rLED = GPIO.PWM(rPin, PWMfreq)
-	gLED = GPIO.PWM(gPin, PWMfreq)
-	bLED = GPIO.PWM(bPin, PWMfreq)
-	rLED.start(calcR(rNow))
-	gLED.start(calcG(gNow))
-	bLED.start(calcB(bNow))
+	#GPIO.setmode(GPIO.BOARD)
+	#GPIO.setwarnings(False)
+	#GPIO.setup(rPin, GPIO.OUT)
+	#GPIO.setup(gPin, GPIO.OUT)
+	#GPIO.setup(bPin, GPIO.OUT)
+	#rLED = GPIO.PWM(rPin, PWMfreq)
+	#gLED = GPIO.PWM(gPin, PWMfreq)
+	#bLED = GPIO.PWM(bPin, PWMfreq)
+	#rLED.start(calcR(rNow))
+	#gLED.start(calcG(gNow))
+	#bLED.start(calcB(bNow))
+	#RPi.GPIO's PWM SUCKS!
+	#tr = PWM(calcR(rNow), 'R')
+	#tg = PWM(calcG(gNow), 'G')
+	#tb = PWM(calcB(bNow), 'B')
+	#tr.start()
+	#tg.start()
+	#tb.start()
+	p.communicate(input=str(calcR(rNow)) + ' ' + str(calcG(gNow)) + ' ' + str(calcB(bNow)))
 except:
 	pass
 
@@ -111,9 +143,16 @@ def handlepost(t, r, g, b):
 	rNow = r
 	gNow = g
 	bNow = b
-	rLED.ChangeDutyCycle(calcR(rNow))
-	gLED.ChangeDutyCycle(calcG(gNow))
-	bLED.ChangeDutyCycle(calcB(bNow))
+	#tr.flag = False
+	#tg.flag = False
+	#tb.flag = False
+	#tr = PWM(calcR(rNow), 'R')
+	#tg = PWM(calcG(gNow), 'G')
+	#tb = PWM(calcB(bNow), 'B')
+	#tr.start()
+	#tg.start()
+	#tb.start()
+	p.communicate(input=str(calcR(rNow)) + ' ' + str(calcG(gNow)) + ' ' + str(calcB(bNow)))
 	return 'succeed'
 
 @app.route('/static/<path:path>')
