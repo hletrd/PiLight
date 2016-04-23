@@ -1,0 +1,247 @@
+<!doctype HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta id="viewport" name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+	<title>PiLight</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+	<style type="text/css">
+	body {
+		background-color: #272822;
+		color: #FFFFFF;
+	}
+	.pane {
+		position: absolute;
+		z-index: 0;
+	}
+	.pane_scroll {
+		position: absolute;
+		z-index: 1;
+	}
+	.jscolor {
+		border: none;
+	}
+	#colorcontainer {
+		margin-top: -20px;
+	}
+	</style>
+	<script>
+	"use strict";
+	var ct_start = 2000;
+	var ct_end = 10000;
+	var tNow = {{tNow}};
+	var rNow = {{rNow}};
+	var gNow = {{gNow}};
+	var bNow = {{bNow}};
+
+	function colorTemptoRGB(colortemp) {
+		var r, g, b;
+		colortemp /= 100;
+		if (colortemp <= 66) {
+			r = 255;
+			g = colortemp;
+			g = 99.47 * Math.log(g) - 161.1;
+			if (g < 0) g = 0;
+			if (g > 255) g = 255;
+			if (colortemp <= 19) {
+				b = 0;
+			} else {
+				b = colortemp - 10;
+				b = 138.5 * Math.log(b) - 305;
+				if (b < 0) b = 0;
+				if (b > 255) b = 255;
+			}
+		} else {
+			r = colortemp - 60;
+			r = 329.7 * Math.pow(r, -0.1332);
+			g = colortemp - 60;
+			g = 288.1 * Math.pow(g, -0.07551);
+			if (r < 0) r = 0;
+			if (r > 255) r = 255;
+			if (g < 0) g = 0;
+			if (g > 255) g = 255;
+			b = 255;
+		}
+		r = 0|r;
+		g = 0|g;
+		b = 0|b;
+		return {'r': r, 'g': g, 'b': b};
+	}
+
+	function colorTemptoRGBString(colortemp) {
+		var rgb = colorTemptoRGB(colortemp);
+		var r = rgb.r, g = rgb.g, b = rgb.b;
+
+		r = r.toString(16);
+		g = g.toString(16);
+		b = b.toString(16);
+		if (r.length < 2) r = '0'+r;
+		if (r.length < 2) r = '0'+r;
+		if (g.length < 2) g = '0'+g;
+		if (g.length < 2) g = '0'+g;
+		if (b.length < 2) b = '0'+b;
+		if (b.length < 2) b = '0'+b;
+
+		return '#'+r+g+b;
+	}
+
+	function ctTouch(e) {
+		e.preventDefault();
+		if (ctdown == true) {
+		var t = e.changedTouches;
+			for(var i in t) {
+				var tX = (t[i].pageX - ctx_scroll_ct.canvas.offsetLeft) * window.devicePixelRatio;
+				ctx_scroll_ct.clearRect(0, 0, ctx_scroll_ct.canvas.width, ctx_scroll_ct.canvas.height);
+				tNow = 0|(ct_end - ct_start) * (tX / ctx_scroll_ct.canvas.width) + ct_start;
+				ctx_scroll_ct.beginPath();
+				ctx_scroll_ct.moveTo((tNow - ct_start) / (ct_end - ct_start) * ctx_scroll_ct.canvas.width-12, 0);
+				ctx_scroll_ct.lineTo((tNow - ct_start) / (ct_end - ct_start) * ctx_scroll_ct.canvas.width-12, ctx_scroll_ct.canvas.height);
+				ctx_scroll_ct.moveTo((tNow - ct_start) / (ct_end - ct_start) * ctx_scroll_ct.canvas.width+12, 0);
+				ctx_scroll_ct.lineTo((tNow - ct_start) / (ct_end - ct_start) * ctx_scroll_ct.canvas.width+12, ctx_scroll_ct.canvas.height);
+				ctx_scroll_ct.moveTo((tNow - ct_start) / (ct_end - ct_start) * ctx_scroll_ct.canvas.width-12, 2);
+				ctx_scroll_ct.lineTo((tNow - ct_start) / (ct_end - ct_start) * ctx_scroll_ct.canvas.width+12, 2);
+				ctx_scroll_ct.moveTo((tNow - ct_start) / (ct_end - ct_start) * ctx_scroll_ct.canvas.width-12, ctx_scroll_ct.canvas.height-2);
+				ctx_scroll_ct.lineTo((tNow - ct_start) / (ct_end - ct_start) * ctx_scroll_ct.canvas.width+12, ctx_scroll_ct.canvas.height-2);
+				ctx_scroll_ct.stroke();
+				document.getElementById('label_ct').innerHTML = tNow + 'K';
+				send();
+				break;
+			}
+		}
+	}
+
+	function ctDownMouse(e) {
+		ctdown = true;
+		ctMouse(e);
+	}
+	function ctDownTouch(e) {
+		ctdown = true;
+		ctTouch(e);
+	}
+	function ctUp() {
+		ctdown = false;
+	}
+
+	function ctMouse(e) {
+		e.preventDefault();
+		if (ctdown == true) {
+			var tX = e.offsetX * window.devicePixelRatio;
+			ctx_scroll_ct.clearRect(0, 0, ctx_scroll_ct.canvas.width, ctx_scroll_ct.canvas.height);
+			tNow = 0|(ct_end - ct_start) * (tX / ctx_scroll_ct.canvas.width) + ct_start;
+			ctx_scroll_ct.beginPath();
+			ctx_scroll_ct.moveTo((tNow - ct_start) / (ct_end - ct_start) * ctx_scroll_ct.canvas.width-12, 0);
+			ctx_scroll_ct.lineTo((tNow - ct_start) / (ct_end - ct_start) * ctx_scroll_ct.canvas.width-12, ctx_scroll_ct.canvas.height);
+			ctx_scroll_ct.moveTo((tNow - ct_start) / (ct_end - ct_start) * ctx_scroll_ct.canvas.width+12, 0);
+			ctx_scroll_ct.lineTo((tNow - ct_start) / (ct_end - ct_start) * ctx_scroll_ct.canvas.width+12, ctx_scroll_ct.canvas.height);
+			ctx_scroll_ct.moveTo((tNow - ct_start) / (ct_end - ct_start) * ctx_scroll_ct.canvas.width-12, 2);
+			ctx_scroll_ct.lineTo((tNow - ct_start) / (ct_end - ct_start) * ctx_scroll_ct.canvas.width+12, 2);
+			ctx_scroll_ct.moveTo((tNow - ct_start) / (ct_end - ct_start) * ctx_scroll_ct.canvas.width-12, ctx_scroll_ct.canvas.height-2);
+			ctx_scroll_ct.lineTo((tNow - ct_start) / (ct_end - ct_start) * ctx_scroll_ct.canvas.width+12, ctx_scroll_ct.canvas.height-2);
+			ctx_scroll_ct.stroke();
+			document.getElementById('label_ct').innerHTML = tNow + 'K';
+			send();
+		}
+	}
+
+	function send() {
+		var xhr = new XMLHttpRequest();
+		xhr.open('GET', './send/' + tNow + '/' + rNow + '/' + gNow + '/' + bNow, true);
+		xhr.send(null);
+	}
+
+	function sendrgb(jscolor) {
+		rNow = 0|jscolor.rgb[0];
+		gNow = 0|jscolor.rgb[1];
+		bNow = 0|jscolor.rgb[2];
+		send();
+	}
+	</script>
+</head>
+<body>
+<div class="container">
+	<h3>PiLight</h3>
+	<hr>
+	<h4>Color temperature</h4>
+	<div class="row" id="canvascontainer">
+		<div class="col-md-12">
+		<canvas class="pane" id="colortemp"></canvas>
+		<canvas class="pane_scroll" id="scroll_ct"></canvas>
+		<div id="spacer1"></div>
+		</div>
+	</div>
+	<h4 id="label_ct"></h4>
+	<hr>
+	<h4>RGB / Luminance</h4>
+	<div class="row" id="colorcontainer">
+		<div class="col-md-12">
+			<input id="colorpicker" class="jscolor {width: 240, height: 200}">
+		</div>
+	</div>
+</div>
+<script>
+window.devicePixelRatio = window.devicePixelRatio || 1;
+var cwidth = parseInt(document.getElementById("spacer1").offsetWidth);
+var cheight = 100;
+if (cwidth < 400) cheight = 50;
+document.getElementById("colortemp").width = cwidth * window.devicePixelRatio;
+document.getElementById("colortemp").height = cheight * window.devicePixelRatio;
+document.getElementById("scroll_ct").width = cwidth * window.devicePixelRatio;
+document.getElementById("scroll_ct").height = cheight * window.devicePixelRatio;
+
+document.getElementById("colortemp").style.width = cwidth + 'px';
+document.getElementById("colortemp").style.height = cheight + 'px';
+document.getElementById("scroll_ct").style.width = cwidth + 'px';
+document.getElementById("scroll_ct").style.height = cheight + 'px';
+
+document.getElementById("spacer1").setAttribute('style', 'height: ' + cheight + 'px');
+
+var c = document.getElementById("colortemp");
+ctx_colortemp = c.getContext("2d");
+var gradient = ctx_colortemp.createLinearGradient(0, 0, ctx_colortemp.canvas.width, 0);
+
+for(var i = ct_start; i < ct_end; i+=100){
+	gradient.addColorStop((i - ct_start) / (ct_end - ct_start), colorTemptoRGBString(i));
+}
+ctx_colortemp.fillStyle = gradient;
+ctx_colortemp.fillRect(0, 0, ctx_colortemp.canvas.width, ctx_colortemp.canvas.height);
+
+c = document.getElementById("scroll_ct");
+ctx_scroll_ct = c.getContext("2d");
+
+ctx_scroll_ct.beginPath();
+ctx_scroll_ct.moveTo((tNow - ct_start) / (ct_end - ct_start) * ctx_scroll_ct.canvas.width-12, 0);
+ctx_scroll_ct.lineTo((tNow - ct_start) / (ct_end - ct_start) * ctx_scroll_ct.canvas.width-12, ctx_scroll_ct.canvas.height);
+ctx_scroll_ct.moveTo((tNow - ct_start) / (ct_end - ct_start) * ctx_scroll_ct.canvas.width+12, 0);
+ctx_scroll_ct.lineTo((tNow - ct_start) / (ct_end - ct_start) * ctx_scroll_ct.canvas.width+12, ctx_scroll_ct.canvas.height);
+ctx_scroll_ct.moveTo((tNow - ct_start) / (ct_end - ct_start) * ctx_scroll_ct.canvas.width-12, 2);
+ctx_scroll_ct.lineTo((tNow - ct_start) / (ct_end - ct_start) * ctx_scroll_ct.canvas.width+12, 2);
+ctx_scroll_ct.moveTo((tNow - ct_start) / (ct_end - ct_start) * ctx_scroll_ct.canvas.width-12, ctx_scroll_ct.canvas.height-2);
+ctx_scroll_ct.lineTo((tNow - ct_start) / (ct_end - ct_start) * ctx_scroll_ct.canvas.width+12, ctx_scroll_ct.canvas.height-2);
+
+ctx_scroll_ct.strokeStyle = '#000';
+ctx_scroll_ct.lineWidth = 4;
+ctx_scroll_ct.stroke();
+
+document.getElementById('label_ct').innerHTML = tNow + 'K';
+
+c.addEventListener("touchstart", ctDownTouch, false);
+c.addEventListener("touchmove", ctTouch, false);
+c.addEventListener("touchend", ctUp, false);
+c.addEventListener("touchcancel", ctUp, false);
+c.addEventListener("touchleave", ctUp, false);
+c.addEventListener("mousedown", ctDownMouse, false);
+c.addEventListener("mousemove", ctMouse, false);
+c.addEventListener("mouseup", ctUp, false);
+c.addEventListener("mouseout", ctUp, false);
+
+ctdown = false;
+document.getElementById("colorpicker").setAttribute('class', 'jscolor {width:' + (cwidth-60) + ', height:200, onFineChange:\'sendrgb(this)\'}');
+window.onload = function(){
+	document.getElementById("colorpicker").jscolor.fromRGB(rNow, gNow, bNow);
+	document.getElementById("colorpicker").jscolor.show();
+	document.getElementById("colorpicker").setAttribute('style', 'display: none');
+}
+</script>
+<script src="./static/jscolor.min.js"></script>
+</body>
+</html>
