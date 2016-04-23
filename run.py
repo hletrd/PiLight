@@ -107,9 +107,9 @@ def handlepost(t, r, g, b):
 	rNow = r
 	gNow = g
 	bNow = b
-	rLED.changeDucyCycle(calcR(rNow))
-	gLED.changeDucyCycle(calcG(gNow))
-	bLED.changeDucyCycle(calcB(bNow))
+	rLED.changeDutyCycle(calcR(rNow))
+	gLED.changeDutyCycle(calcG(gNow))
+	bLED.changeDutyCycle(calcB(bNow))
 	return 'succeed'
 
 @app.route('/static/<path:path>')
