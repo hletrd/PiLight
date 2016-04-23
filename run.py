@@ -1,5 +1,5 @@
 try:
-	import RPI.GPIO as GPIO
+	import RPi.GPIO as GPIO
 except:
 	print('No module named RPI found')
 from flask import Flask, render_template, send_from_directory
