@@ -113,6 +113,7 @@ try:
 	#tg.start()
 	#tb.start()
 	p.stdin.write(str(calcR(rNow)) + ' ' + str(calcG(gNow)) + ' ' + str(calcB(bNow)) + "\n")
+	print str(calcR(rNow)) + ' ' + str(calcG(gNow)) + ' ' + str(calcB(bNow))
 except:
 	pass
 
@@ -153,6 +154,7 @@ def handlepost(t, r, g, b):
 	#tg.start()
 	#tb.start()
 	p.stdin.write(str(calcR(rNow)) + ' ' + str(calcG(gNow)) + ' ' + str(calcB(bNow)) + "\n")
+	print str(calcR(rNow)) + ' ' + str(calcG(gNow)) + ' ' + str(calcB(bNow))
 	return 'succeed'
 
 @app.route('/static/<path:path>')
