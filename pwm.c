@@ -1,7 +1,7 @@
 #include <pigpio.h>
 #include <stdio.h>
 int main(int argc, char **argv) {
-	gpioInitialise();
+	if (gpioInitialise() < 0) exit(1);
 	gpioSetMode(16, PI_OUTPUT);
 	gpioSetMode(20, PI_OUTPUT);
 	gpioSetMode(21, PI_OUTPUT);
