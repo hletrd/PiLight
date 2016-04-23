@@ -16,7 +16,7 @@ int main(int argc, char **argv) {
 	int r, g, b;
 	FILE *f;
 	while(1) {
-		f = fopen('pwm.txt', "r");
+		f = fopen("pwm.txt", "r");
 		fscanf(f, "%d%d%d", &r, &g, &b);
 		gpioPWM(16, r);
 		gpioPWM(20, g);
