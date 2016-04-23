@@ -92,7 +92,7 @@ def calcB(rawB):
 			GPIO.output(pin, 0)
 			sleep(0.01)"""
 
-os.system("sudo ./pwm " + str(calcR(rNow)) + ' ' + str(calcG(gNow)) + ' ' + str(calcB(bNow)))
+os.system("sudo ./pwm " + str(calcR(rNow)) + ' ' + str(calcG(gNow)) + ' ' + str(calcB(bNow)) + " > /dev/null &")
 
 #try:
 	#GPIO.setmode(GPIO.BOARD)
@@ -154,7 +154,7 @@ def handlepost(t, r, g, b):
 	#tg.start()
 	#tb.start()
 	os.system("sudo killall -9 pwm")
-	os.system("sudo ./pwm " + str(calcR(rNow)) + ' ' + str(calcG(gNow)) + ' ' + str(calcB(bNow)))
+	os.system("sudo ./pwm " + str(calcR(rNow)) + ' ' + str(calcG(gNow)) + ' ' + str(calcB(bNow)) + " > /dev/null &")
 	return 'succeed'
 
 @app.route('/static/<path:path>')
