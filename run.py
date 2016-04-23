@@ -20,6 +20,10 @@ rMax = 50
 gMax = 72
 bMax = 72
 
+rPin = 36
+gPin = 38
+bPin = 40
+
 def colorTemptoRGB(colortemp):
 	colortemp /= 100
 	if colortemp <= 66:
@@ -58,22 +62,22 @@ def colorTemptoRGB(colortemp):
 	return {'r': r, 'g': g, 'b': b}
 
 def calcR(rawR):
-	return rawR / 255.0 * rMax / 100 * colorTemptoRGB(tNow)['r']/255
+	return rawR / 255.0 * rMax / 100 * colorTemptoRGB(tNow)['r']/255*100
 
 def calcG(rawG):
-	return rawG / 255.0 * gMax / 100 * colorTemptoRGB(tNow)['g']/255
+	return rawG / 255.0 * gMax / 100 * colorTemptoRGB(tNow)['g']/255*100
 
 def calcB(rawB):
-	return rawB / 255.0 * bMax / 100 * colorTemptoRGB(tNow)['b']/255
+	return rawB / 255.0 * bMax / 100 * colorTemptoRGB(tNow)['b']/255*100
 
 try:
-	GPIO.setmode(GPIO.BCM)
-	GPIO.setup(3, GPIO.OUT)
-	GPIO.setup(5, GPIO.OUT)
-	GPIO.setup(7, GPIO.OUT)
-	rLED = GPIO.PWM(3, PWMfreq)
-	gLED = GPIO.PWM(5, PWMfreq)
-	bLED = GPIO.PWM(7, PWMfreq)
+	GPIO.setmode(GPIO.BOARD)
+	GPIO.setup(rPin, GPIO.OUT)
+	GPIO.setup(gPin, GPIO.OUT)
+	GPIO.setup(bPin, GPIO.OUT)
+	rLED = GPIO.PWM(rPin, PWMfreq)
+	gLED = GPIO.PWM(gPin, PWMfreq)
+	bLED = GPIO.PWM(bPin, PWMfreq)
 	rLED.start(calcR(rNow))
 	gLED.start(calcG(gNow))
 	bLED.start(calcB(bNow))
