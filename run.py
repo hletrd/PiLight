@@ -11,9 +11,9 @@ from subprocess import Popen, PIPE, STDOUT
 
 app = Flask(__name__)
 tNow = 6600
-rNow = 255
-gNow = 255
-bNow = 255
+rNow = 100
+gNow = 100
+bNow = 100
 
 tMax = 12000
 tmin = 1500
