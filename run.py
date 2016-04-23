@@ -91,7 +91,7 @@ def calcB(rawB):
 			GPIO.output(pin, 0)
 			sleep(0.01)"""
 
-p = Popen(['pwm'], stdout=PIPE, stdin=PIPE, stderr=PIPE)
+p = Popen(['./pwm'], stdout=PIPE, stdin=PIPE, stderr=PIPE)
 
 try:
 	#GPIO.setmode(GPIO.BOARD)
