@@ -12,6 +12,9 @@ rNow = 255
 gNow = 255
 bNow = 255
 
+tMax = 12000
+tmin = 1500
+
 PWMfreq = 1000
 rMax = 50
 gMax = 72
@@ -53,7 +56,6 @@ def colorTemptoRGB(colortemp):
 			g = 255
 		b = 255
 	return {'r': r, 'g': g, 'b': b}
-print colorTemptoRGB(2000)['r']
 
 def calcR(rawR):
 	return rawR / 255.0 * rMax / 100 * colorTemptoRGB(tNow)['r']/255
@@ -84,7 +86,23 @@ def index():
 
 @app.route('/send/<int:t>/<int:r>/<int:g>/<int:b>')
 def handlepost(t, r, g, b):
-	global tNow, rNow, gNow, bNow, rLED, gLED, bLED
+	global tNow, rNow, gNow, bNow, rLED, gLED, bLED, tMax, tmin
+	if t > tMax:
+		t = tMax
+	elif t < tmin:
+		t = tmin
+	if r > 255:
+		r = 255
+	elif r < 0:
+		r = 0
+	if g > 255:
+		g = 255
+	elif g < 0:
+		g = 0
+	if b > 255:
+		b = 255
+	elif b < 0:
+		b = 0
 	tNow = t
 	rNow = r
 	gNow = g
