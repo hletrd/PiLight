@@ -154,6 +154,7 @@ def handlepost(t, r, g, b):
 	#tr.start()
 	#tg.start()
 	#tb.start()
+	p.expect('PWM set OK')
 	p.sendline(str(calcR(rNow)) + ' ' + str(calcG(gNow)) + ' ' + str(calcB(bNow)))
 	print str(calcR(rNow)) + ' ' + str(calcG(gNow)) + ' ' + str(calcB(bNow))
 	return 'succeed'

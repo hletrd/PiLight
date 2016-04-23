@@ -12,6 +12,7 @@ int main(int argc, char **argv) {
 	while(1) {
 		int r, g, b;
 		scanf("%d%d%d", &r, &g, &b);
+		gpioInitialise();
 		gpioPWM(16, r);
 		gpioPWM(20, g);
 		gpioPWM(21, b);
