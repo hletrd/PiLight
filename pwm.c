@@ -1,6 +1,7 @@
 #include <pigpio.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 int main(int argc, char **argv) {
 	if (gpioInitialise() < 0) return 0;
 	gpioSetMode(16, PI_OUTPUT);
@@ -22,5 +23,6 @@ int main(int argc, char **argv) {
 		gpioPWM(20, g);
 		gpioPWM(21, b);
 		fclose(stdin);
+		usleep(500000);
 	}
 }
