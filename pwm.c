@@ -10,8 +10,17 @@ int main(int argc, char **argv) {
 	gpioSetPWMrange(20, 1000);
 	gpioSetPWMrange(21, 1000);
 
-	gpioPWM(16, atoi(argv[0]));
-	gpioPWM(20, atoi(argv[1]));
-	gpioPWM(21, atoi(argv[2]));
-	getchar();
+	gpioPWM(16, atoi(argv[1]));
+	gpioPWM(20, atoi(argv[2]));
+	gpioPWM(21, atoi(argv[3]));
+	int r, g, b;
+	FILE *f;
+	while(1) {
+		f = fopen('pwm.txt', 'r');
+		fscanf(f, "%d%d%d", &r, &g, &b);
+		gpioPWM(16, r);
+		gpioPWM(20, g);
+		gpioPWM(21, b);
+		fclose(stdin);
+	}
 }

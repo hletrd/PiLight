@@ -7,8 +7,7 @@ from flask import Flask, render_template, send_from_directory
 import math
 #import threading
 #from time import sleep
-from subprocess import Popen, PIPE, STDOUT
-import os
+import subprocess, os
 
 app = Flask(__name__)
 tNow = 6600
@@ -92,7 +91,7 @@ def calcB(rawB):
 			GPIO.output(pin, 0)
 			sleep(0.01)"""
 
-os.system("sudo ./pwm " + str(calcR(rNow)) + ' ' + str(calcG(gNow)) + ' ' + str(calcB(bNow)) + " > /dev/null &")
+subprocess.Popen(["sudo", "./pwm", str(calcR(rNow)), str(calcG(gNow)), str(calcB(bNow))])
 
 #try:
 	#GPIO.setmode(GPIO.BOARD)
@@ -153,8 +152,9 @@ def handlepost(t, r, g, b):
 	#tr.start()
 	#tg.start()
 	#tb.start()
-	os.system("sudo killall -9 pwm")
-	os.system("sudo ./pwm " + str(calcR(rNow)) + ' ' + str(calcG(gNow)) + ' ' + str(calcB(bNow)) + " > /dev/null &")
+	f = open('pwm.txt', 'w')
+	f.write(str(calcR(rNow)) + ' ' + str(calcG(gNow)) + ' ' + str(calcB(bNow)))
+	f.close()
 	return 'succeed'
 
 @app.route('/static/<path:path>')
