@@ -155,11 +155,17 @@
 		bNow = 0|jscolor.rgb[2];
 		send();
 	}
+
+	function reset() {
+		var xhr = new XMLHttpRequest();
+		xhr.open('GET', './reset', true);
+		xhr.send(null);
+	}
 	</script>
 </head>
 <body>
 <div class="container">
-	<h3><s>P*Light</s> PiLight</h3>
+	<h3><s>P*Light</s> PiLight <button class="btn btn-success" onclick="reset();">Reset Light</button></h3>
 	<hr>
 	<h4>Color temperature</h4>
 	<div class="row" id="canvascontainer">
