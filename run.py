@@ -7,7 +7,7 @@ from flask import Flask, render_template, send_from_directory
 import math
 #import threading
 #from time import sleep
-import subprocess, os
+import subprocess, os, signal
 
 app = Flask(__name__)
 tNow = 6600
@@ -91,7 +91,7 @@ def calcB(rawB):
 			GPIO.output(pin, 0)
 			sleep(0.01)"""
 
-subprocess.Popen(["sudo", "./pwm", str(calcR(rNow)), str(calcG(gNow)), str(calcB(bNow))])
+p = subprocess.Popen(["sudo", "./pwm", str(calcR(rNow)), str(calcG(gNow)), str(calcB(bNow))])
 
 #try:
 	#GPIO.setmode(GPIO.BOARD)
@@ -122,7 +122,7 @@ def index():
 
 @app.route('/send/<int:t>/<int:r>/<int:g>/<int:b>')
 def handlepost(t, r, g, b):
-	global tNow, rNow, gNow, bNow, rLED, gLED, bLED, tMax, tmin, p
+	global tNow, rNow, gNow, bNow, rLED, gLED, bLED, tMax, tmin
 	if t > tMax:
 		t = tMax
 	elif t < tmin:
@@ -157,9 +157,16 @@ def handlepost(t, r, g, b):
 	f.close()
 	return 'succeed'
 
+@app.route('/reset')
+def reset():
+	global p
+	os.killpg(os.getpgid(p.pid), signal.SIGTERM)
+	#os.system('killall -9 python')
+	p = subprocess.Popen(["sudo", "./pwm", str(calcR(rNow)), str(calcG(gNow)), str(calcB(bNow))])
+
 @app.route('/static/<path:path>')
 def send_static(path):
 	return send_from_directory(app.config['UPLOAD_FOLDER'], path, as_attachment=False)
 
 if __name__ == '__main__':
-	app.run(host='0.0.0.0', debug=True, port=8080)
+	app.run(host='0.0.0.0', debug=True, port=80)
