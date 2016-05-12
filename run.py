@@ -159,10 +159,10 @@ def handlepost(t, r, g, b):
 
 @app.route('/reset')
 def reset():
-	global p
-	os.killpg(os.getpgid(p.pid), signal.SIGTERM)
-	os.system('killall -9 pwm')
-	p = subprocess.Popen(["sudo", "./pwm", str(calcR(rNow)), str(calcG(gNow)), str(calcB(bNow))])
+	#global p
+	#os.killpg(os.getpgid(p.pid), signal.SIGTERM)
+	os.system('sudo reboot')
+	#p = subprocess.Popen(["sudo", "./pwm", str(calcR(rNow)), str(calcG(gNow)), str(calcB(bNow))])
 	return 'succeed'
 
 @app.route('/static/<path:path>')
