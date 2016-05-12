@@ -63,7 +63,7 @@ def colorTemptoRGB(colortemp):
 def logLED(inp):
 	sumLED = rMax + gMax + bMax
 	try:
-		sumLED = math.pow(inp, 2)/math.pow(sumLED, 2)
+		sumLED = math.pow(inp, 1.5)/math.pow(sumLED, 1.5)
 	except:
 		sumLED = 0
 	return inp * sumLED
