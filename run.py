@@ -163,6 +163,7 @@ def reset():
 	os.killpg(os.getpgid(p.pid), signal.SIGTERM)
 	#os.system('killall -9 python')
 	p = subprocess.Popen(["sudo", "./pwm", str(calcR(rNow)), str(calcG(gNow)), str(calcB(bNow))])
+	return 'succeed'
 
 @app.route('/static/<path:path>')
 def send_static(path):
