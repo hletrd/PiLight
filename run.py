@@ -161,7 +161,7 @@ def handlepost(t, r, g, b):
 def reset():
 	global p
 	os.killpg(os.getpgid(p.pid), signal.SIGTERM)
-	#os.system('killall -9 python')
+	os.system('killall -9 pwm')
 	p = subprocess.Popen(["sudo", "./pwm", str(calcR(rNow)), str(calcG(gNow)), str(calcB(bNow))])
 	return 'succeed'
 
