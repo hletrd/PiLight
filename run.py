@@ -60,24 +60,40 @@ def colorTemptoRGB(colortemp):
 		b = 255
 	return {'r': r, 'g': g, 'b': b}
 
-def logLED(inp):
+def logLEDR(inp):
 	sumLED = rNow + gNow + bNow
 	try:
-		sumLED = math.pow(inp, 2)/math.pow(sumLED,2)
+		sumLED = math.pow(inp, 4)/math.pow(sumLED * (rMax / (rMax + gMax + bMax)),4)
+	except:
+		sumLED = 0
+	return inp * sumLED
+
+def logLEDG(inp):
+	sumLED = rNow + gNow + bNow
+	try:
+		sumLED = math.pow(inp, 4)/math.pow(sumLED * (gMax / (rMax + gMax + bMax)),4)
+	except:
+		sumLED = 0
+	return inp * sumLED
+
+def logLEDB(inp):
+	sumLED = rNow + gNow + bNow
+	try:
+		sumLED = math.pow(inp, 4)/math.pow(sumLED * (bMax / (rMax + gMax + bMax)),4)
 	except:
 		sumLED = 0
 	return inp * sumLED
 
 def calcR(rawR):
-	rawR = logLED(1.0*rawR)
+	rawR = logLEDR(1.0*rawR)
 	return int(rawR / 255.0 * rMax / 100 * colorTemptoRGB(tNow)['r']/255*10000)
 
 def calcG(rawG):
-	rawG = logLED(1.0*rawG)
+	rawG = logLEDG(1.0*rawG)
 	return int(rawG / 255.0 * gMax / 100 * colorTemptoRGB(tNow)['g']/255*10000)
 
 def calcB(rawB):
-	rawB = logLED(1.0*rawB)
+	rawB = logLEDB(1.0*rawB)
 	return int(rawB / 255.0 * bMax / 100 * colorTemptoRGB(tNow)['b']/255*10000)
 
 """class PWM(threading.Thread):
