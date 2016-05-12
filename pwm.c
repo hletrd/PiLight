@@ -7,9 +7,9 @@ int main(int argc, char **argv) {
 	gpioSetMode(16, PI_OUTPUT);
 	gpioSetMode(20, PI_OUTPUT);
 	gpioSetMode(21, PI_OUTPUT);
-	gpioSetPWMrange(16, 10000);
-	gpioSetPWMrange(20, 10000);
-	gpioSetPWMrange(21, 10000);
+	gpioSetPWMrange(16, 20000);
+	gpioSetPWMrange(20, 20000);
+	gpioSetPWMrange(21, 20000);
 
 	gpioPWM(16, atoi(argv[1]));
 	gpioPWM(20, atoi(argv[2]));
