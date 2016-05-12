@@ -19,9 +19,9 @@ tMax = 12000
 tmin = 1500
 
 #PWMfreq = 100
-rMax = 50
-gMax = 72
-bMax = 72
+rMax = 60
+gMax = 85
+bMax = 80
 
 def colorTemptoRGB(colortemp):
 	colortemp /= 100
