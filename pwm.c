@@ -23,6 +23,6 @@ int main(int argc, char **argv) {
 		gpioPWM(20, g);
 		gpioPWM(21, b);
 		fclose(stdin);
-		usleep(500000);
+		usleep(50000);
 	}
 }
