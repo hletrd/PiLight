@@ -61,7 +61,7 @@ def colorTemptoRGB(colortemp):
 	return {'r': r, 'g': g, 'b': b}
 
 def logLEDR(inp):
-	sumLED = rNow + gNow + bNow
+	sumLED = rMax + gMax + bMax
 	try:
 		sumLED = math.pow(inp, 4)/math.pow(sumLED * (rMax * 1.0 / (rMax + gMax + bMax)),4)
 	except:
@@ -69,7 +69,7 @@ def logLEDR(inp):
 	return inp * sumLED
 
 def logLEDG(inp):
-	sumLED = rNow + gNow + bNow
+	sumLED = rMax + gMax + bMax
 	try:
 		sumLED = math.pow(inp, 4)/math.pow(sumLED * (gMax * 1.0 / (rMax + gMax + bMax)),4)
 	except:
@@ -77,7 +77,7 @@ def logLEDG(inp):
 	return inp * sumLED
 
 def logLEDB(inp):
-	sumLED = rNow + gNow + bNow
+	sumLED = rMax + gMax + bMax
 	try:
 		sumLED = math.pow(inp, 4)/math.pow(sumLED * (bMax * 1.0 / (rMax + gMax + bMax)),4)
 	except:
