@@ -14,14 +14,19 @@ int main(int argc, char **argv) {
 	gpioPWM(16, atoi(argv[1]));
 	gpioPWM(20, atoi(argv[2]));
 	gpioPWM(21, atoi(argv[3]));
-	int r, g, b;
+	int r, g, b, ro, go, bo;
 	FILE *f;
 	while(1) {
 		f = fopen("pwm.txt", "r");
+		ro = r;
+		go = g;
+		bo = b;
 		fscanf(f, "%d%d%d", &r, &g, &b);
-		gpioPWM(16, r);
-		gpioPWM(20, g);
-		gpioPWM(21, b);
+		if (ro != r || go != g || bo != b) {
+			gpioPWM(16, r);
+			gpioPWM(20, g);
+			gpioPWM(21, b);
+		}
 		fclose(stdin);
 		usleep(50000);
 	}
