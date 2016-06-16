@@ -10,6 +10,8 @@
 * Connect each gpio channel with RGB LED as following circuit
 ![circuit](https://github.com/hletrd/PiLight/blob/master/circuit.jpg)
  * Sorry for bad drawing, but now I don't have any tool to draw schematics.
+ * I used a LED part from [adafruit](https://www.adafruit.com/product/2524).
+  * I'd recommend you to use cooling fans, or large heatsink for LED.
 
 ## Setting up
 * Install [pigpio](http://abyz.co.uk/rpi/pigpio/)
